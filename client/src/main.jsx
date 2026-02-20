@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
@@ -10,7 +9,7 @@ createRoot(document.getElementById('root')).render(
       clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
       authorizationParams={{
         redirect_uri: window.location.origin,
-        // audience: import.meta.env.VITE_AUTH0_API_IDENTIFIER
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE
       }}
     >
       <App />
