@@ -1,8 +1,10 @@
 require('dotenv').config()
-
+const connectToDatabase = require("./src/config/db")
 const express = require('express')
 const cors = require('cors')
 const protectRoute = require('./src/middlewares/protectRoute')
+
+connectToDatabase()
 
 const app = express()
 
