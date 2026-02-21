@@ -8,4 +8,4 @@ const courseSchema = new mongoose.Schema({
     tags: [{ type: String, trim: true }]
 }, { timestamps: true });
 
-module.exports = mongoose.model('Canvas', canvasSchema)
+module.exports = mongoose.model('Course', courseSchema)
