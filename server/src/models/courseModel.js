@@ -20,7 +20,8 @@ const createCourse = async (title, description, user, tags) => {
         title,
         description,
         creator: user,
-        tags
+        modules,
+        tags,
     })
     await course.save()
     return course
