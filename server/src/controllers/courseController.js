@@ -1,5 +1,7 @@
 const { getCourses, createCourse } = require("../models/courseModel")
 const { generateCourse } = require("../services/aiService")
+const { createLesson } = require("../models/lessonModel")
+const { createModule } = require("../models/moduleModel")
 
 const getUserCourses = async (req, res) => {
     try {
@@ -43,6 +45,25 @@ const generateAndSaveCourse = async (req, res) => {
             user,
             generated.tags,
         )
+
+        const moduleIds = []
+        for (const mod of generated.modules) {
+            const savedModule = await createModule(mod.title, course._id)
+
+            const lessonIds = []
+            for (const lesson of mod.lessons) {
+                const savedLesson = await createLesson(lesson.title, savedModule._id)
+                lessonIds.push(savedLesson._id)
+            }
+
+            savedModule.lessons = lessonIds
+            await savedModule.save()
+
+            moduleIds.push(savedModule._id)
+        }
+
+        course.modules = moduleIds
+        await course.save()
 
         res.status(201).json({ course, modules: generated.modules })
     } catch (error) {

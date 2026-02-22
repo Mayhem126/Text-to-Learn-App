@@ -6,4 +6,12 @@ const moduleSchema = new mongoose.Schema({
     lessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' }]
 }, { timestamps: true });
 
-module.exports = mongoose.model('Module', moduleSchema)
+const Module = mongoose.model('Module', moduleSchema)
+
+const createModule = async (title, courseId) => {
+    const module = new Module({ title, course: courseId })
+    await module.save()
+    return module
+}
+
+module.exports = { Module, createModule }

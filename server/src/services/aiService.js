@@ -54,7 +54,8 @@ const generateCourse = async (topic) => {
         })
 
         console.log("Raw Gemini response:", response.text)
-        return courseSchema.parse(JSON.parse(response.text))
+        const parsed = courseSchema.parse(JSON.parse(response.text))
+        return parsed
     } catch (error) {
         console.log("Gemini error:", error)
         throw error

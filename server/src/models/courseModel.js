@@ -20,7 +20,6 @@ const createCourse = async (title, description, user, tags) => {
         title,
         description,
         creator: user,
-        modules,
         tags,
     })
     await course.save()
