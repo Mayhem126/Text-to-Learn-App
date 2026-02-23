@@ -26,4 +26,12 @@ const createCourse = async (title, description, user, tags) => {
     return course
 }
 
-module.exports = { Course, getCourses, createCourse }
+const getCourseById = async (courseId) => {
+    const course = await Course.findById(courseId).populate({
+        path: 'modules',
+        populate: { path: 'lessons' }
+    })
+    return course
+}
+
+module.exports = { Course, getCourses, createCourse, getCourseById }

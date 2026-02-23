@@ -1,4 +1,4 @@
-const { getCourses, createCourse } = require("../models/courseModel")
+const { getCourses, createCourse, getCourseById } = require("../models/courseModel")
 const { generateCourse } = require("../services/aiService")
 const { createLesson } = require("../models/lessonModel")
 const { createModule } = require("../models/moduleModel")
@@ -71,4 +71,14 @@ const generateAndSaveCourse = async (req, res) => {
     }
 }
 
-module.exports = { getUserCourses, saveCourse, generateAndSaveCourse }
+const getCourse = async (req, res) => {
+    try{
+        const course = await getCourseById(req.params.courseId)
+        if (!course) return res.status(404).json({ error: `Course not found`})
+        res.json(course)
+    } catch (error) {
+        res.status(500).json({message: `Failed to fetch course`, details: error.message})
+    }
+}
+
+module.exports = { getUserCourses, saveCourse, generateAndSaveCourse, getCourse }
