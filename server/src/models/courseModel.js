@@ -11,7 +11,10 @@ const courseSchema = new mongoose.Schema({
 const Course = mongoose.model('Course', courseSchema)
 
 const getCourses = async (user) => {
-    const courses = await Course.find({ creator: user })
+    const courses = await Course.find({ creator: user }).populate({
+        path: 'modules',
+        populate: { path: 'lessons' }
+    })
     return courses
 }
 
