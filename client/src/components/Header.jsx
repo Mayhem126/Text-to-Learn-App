@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { LogoutButton } from "./auth"
+import { useNavigate } from "react-router-dom"
 
 const Profile = ({ email, name, image }) => {
     return (
@@ -19,6 +20,7 @@ const Profile = ({ email, name, image }) => {
 const Header = ({ userInfo }) => {
     const [showProfile, setShowProfile] = useState(false)
     const profileRef = useRef(null)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -34,8 +36,8 @@ const Header = ({ userInfo }) => {
 
     return (
         <div className="relative flex justify-between items-center px-6 py-4 border-b border-white/5 bg-[rgba(8,8,20,0.9)] backdrop-blur-xl sticky top-0 z-40">
-            <div className="text-[#e03278] text-xl font-extrabold tracking-tight">
-                ✦ Text-to-Learn
+            <div onClick={navigate("/")} className="group text-[#e03278] text-xl font-extrabold tracking-tight cursor-pointer transition duration-300 hover:drop-shadow-[0_0_6px_#fff] hover:drop-shadow-[0_0_12px_#e03278] hover:drop-shadow-[0_0_20px_#e03278]">
+                <span className="inline-block align-top group-hover:animate-[spin_0.9s_ease-in-out_1]">✦</span> Text-to-Learn
             </div>
             <div ref={profileRef}>
                 <img

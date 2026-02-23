@@ -114,7 +114,7 @@ const DashBoard = () => {
               <p className="mt-5 text-white/40 text-sm sm:text-lg">No courses created yet</p>
             ) : (<ul>
               {courses.map((course) => (
-                <li key={course._id} className="my-5 text-lg sm:text-xl hover:text-[#e03278] cursor-pointer duration-200">{course.title}</li>
+                <li key={course._id} className="my-5 text-lg sm:text-xl hover:text-[#e03278] cursor-pointer transition duration-300 hover:drop-shadow-[0px_0px_3px_#e03278] hover:drop-shadow-[0px_0px_5px_#e35990]">{course.title}</li>
               ))}
             </ul>)}
           </div>
