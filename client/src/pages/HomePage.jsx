@@ -2,13 +2,16 @@ import React from "react";
 import { useAuth0 } from '@auth0/auth0-react';
 import DashBoard from "./DashBoard";
 import LandingPage from "./LandingPage";
+import Loader from "../components/Loader";
 
 const HomePage = () => {
     const { isAuthenticated, isLoading, error } = useAuth0();
 
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center min-h-screen">Loading...</div>
+            <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-[#080814] to-[#1a0a1e]">
+                <Loader />
+            </div>
         );
     }
 
