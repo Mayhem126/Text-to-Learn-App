@@ -77,10 +77,10 @@ const DashBoard = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#080814] text-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#080814] to-[#1a0a1e] text-white">
       <Header userInfo={user} />
       <div className="flex flex-col items-center pt-5 grow px-4">
-        <h1 className="text-2xl sm:text-4xl font-bold mb-8 text-center">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center">
           What do you wanna learn today?
         </h1>
         <div className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl">
@@ -101,20 +101,21 @@ const DashBoard = () => {
             {generateLoading ? "Generating..." : "Generate"}
           </button>
         </div>
-        {message && (
-          <p className={`mt-4 text-sm ${message.includes("successfully") ? "text-green-400" : "text-red-400"}`}>
-            {message}
-          </p>
-        )}
-        {courseLoading ? (<p>Fetching Courses</p>) : (
+        { message && (
+            <p className="mt-4 text-white/40">
+              {message}
+            </p>
+          )
+        }
+        {courseLoading ? (<p className="mt-20 text-xl">Fetching Courses</p>) : (
           <div className="mt-20 border-t border-white/30 w-full max-w-3xl flex flex-col">
-            <h2 className="mt-5 text-xl sm:text-3xl">Courses</h2>
+            <h2 className="mt-5 text-2xl sm:text-3xl">Courses</h2>
             {courses.length === 0 ? (
               <p className="mt-5 text-white/40 text-sm sm:text-lg">No courses created yet</p>
             ) : (<ul>
-              {courses.map((course) => {
-                <li key={course._id} className="my-3 text-sm sm:text-lg">{course.title}</li>
-              })}
+              {courses.map((course) => (
+                <li key={course._id} className="my-5 text-lg sm:text-xl hover:text-[#e03278] cursor-pointer duration-200">{course.title}</li>
+              ))}
             </ul>)}
           </div>
         )}
