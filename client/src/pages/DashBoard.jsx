@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth0 } from '@auth0/auth0-react';
 import Header from "../components/Header";
+import { useNavigate } from "react-router-dom";
 
 const DashBoard = () => {
   const serverURL = import.meta.env.VITE_SERVER_URL;
@@ -10,6 +11,7 @@ const DashBoard = () => {
   const [generateLoading, setGenerateLoading] = useState(false);
   const [courses, setCourses] = useState([]);
   const [courseLoading, setCourseLoading] = useState(false);
+  const navigate = useNavigate();
 
   const getCourses = async () => {
     try {
@@ -114,7 +116,7 @@ const DashBoard = () => {
               <p className="mt-5 text-white/40 text-sm sm:text-lg">No courses created yet</p>
             ) : (<ul>
               {courses.map((course) => (
-                <li key={course._id} className="my-5 text-lg sm:text-xl hover:text-[#e03278] cursor-pointer transition duration-300 hover:drop-shadow-[0px_0px_3px_#e03278] hover:drop-shadow-[0px_0px_5px_#e35990]">{course.title}</li>
+                <li key={course._id} onClick={() => navigate(`/course/${course._id}/module/${course.modules[0]._id}/lesson/${course.modules[0].lessons[0]._id}`)} className="my-5 text-lg sm:text-xl hover:text-[#e03278] cursor-pointer transition duration-300 hover:drop-shadow-[0px_0px_3px_#e03278] hover:drop-shadow-[0px_0px_5px_#e35990]">{course.title}</li>
               ))}
             </ul>)}
           </div>
