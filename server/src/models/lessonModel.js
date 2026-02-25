@@ -15,5 +15,18 @@ const createLesson = async (title, moduleId) => {
     return lesson
 }
 
-module.exports = { Lesson, createLesson }
+const getLesson = async (lessonId) => {
+    const lesson = await Lesson.findById(lessonId)
+    return lesson
+}
+
+const enrichLesson = async (lessonId, content) => {
+    const lesson = await Lesson.findById(lessonId)
+    lesson.content = content
+    lesson.isEnriched = true
+    await lesson.save()
+    return lesson
+}
+
+module.exports = { Lesson, createLesson, enrichLesson, getLesson }
     

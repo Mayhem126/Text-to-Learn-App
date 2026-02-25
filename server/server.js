@@ -6,6 +6,7 @@ const { PORT, FRONTEND_URL } = require("./src/config/env")
 connectToDatabase()
 
 const courseRoute = require("./src/routes/courseRoute")
+const lessonRoute = require("./src/routes/lessonRoute")
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(
 )
 app.use(express.json())
 app.use("/api/courses", courseRoute)
+app.use("/api/lessons", lessonRoute)
 
 app.listen(PORT, () => {
   console.log(`Connected to server at PORT ${PORT}`)
