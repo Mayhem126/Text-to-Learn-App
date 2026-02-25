@@ -18,7 +18,7 @@ const DashBoard = () => {
       setCourseLoading(true);
       const token = await getAccessTokenSilently();
 
-      const response = await fetch(`${serverURL}/`, {
+      const response = await fetch(`${serverURL}/courses/`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`
@@ -51,7 +51,7 @@ const DashBoard = () => {
       setMessage("");
       const token = await getAccessTokenSilently();
 
-      const response = await fetch(`${serverURL}/generate`, {
+      const response = await fetch(`${serverURL}/courses/generate`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

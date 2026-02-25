@@ -11,6 +11,8 @@ const Lesson = () => {
     const { user, getAccessTokenSilently } = useAuth0();
     const { courseId, moduleId, lessonId } = useParams();
     
+    const currentCourse = course?.title
+    const currentModule = course?.modules?.find((mod) => mod.id === moduleId.title)
     const currentLesson = course?.modules
     ?.find((mod) => mod._id === moduleId)
     ?.lessons?.find((lesson) => lesson._id === lessonId)
@@ -19,7 +21,7 @@ const Lesson = () => {
         try {
           const token = await getAccessTokenSilently();
     
-          const response = await fetch(`${serverURL}/${courseId}`, {
+          const response = await fetch(`${serverURL}/courses/${courseId}`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`
@@ -47,7 +49,11 @@ const Lesson = () => {
             <Header userInfo={user} />
             <div className="grow border border-white flex">
                 <Sidebar course={course} />
-                <Content lesson={currentLesson} />
+                <Content 
+                    lesson={currentLesson}
+                    moduleName={currentModule}
+                    courseTopic={currentCourse}
+                />
             </div>
         </div>
     );
