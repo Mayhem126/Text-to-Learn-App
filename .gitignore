@@ -1,26 +1,56 @@
-# Logs
-logs
+# =========================
+# ENV FILES (VERY IMPORTANT)
+# =========================
+.env
+.env.*
+client/.env
+server/.env
+
+# =========================
+# DEPENDENCIES
+# =========================
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# =========================
+# BUILD OUTPUTS
+# =========================
+build/
+dist/
+client/build/
+server/dist/
+
+# =========================
+# LOGS
+# =========================
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# =========================
+# OS FILES
+# =========================
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.env
-.env.*
+Thumbs.db
+
+# =========================
+# EDITOR / IDE
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# TEST COVERAGE
+# =========================
+coverage/
+
+# =========================
+# MISC
+# =========================
+*.local
