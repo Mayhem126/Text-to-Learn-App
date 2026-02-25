@@ -40,7 +40,7 @@ const Lesson = () => {
 
     useEffect(() => {
         getCourse()
-    }, [])
+    }, [courseId])
 
     return (
         <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#080814] to-[#1a0a1e]">
