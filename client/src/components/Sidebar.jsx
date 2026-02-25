@@ -4,46 +4,12 @@ import { useParams } from "react-router-dom";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { TbLayoutSidebarLeftCollapseFilled, TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
-const serverURL = import.meta.env.VITE_SERVER_URL;
 
-const Sidebar = () => {
-    const { getAccessTokenSilently } = useAuth0();
-    const [course, setCourse] = useState({});
+const Sidebar = ({ course }) => {
     const { courseId, moduleId, lessonId } = useParams();
     const [showLessons, setShowLessons] = useState(moduleId);
     const [showSideBar, setShowSideBar] = useState(true);
     const navigate = useNavigate();
-
-    const getCourse = async () => {
-        try {
-        //   setCourseLoading(true);
-          const token = await getAccessTokenSilently();
-    
-          const response = await fetch(`${serverURL}/${courseId}`, {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-          });
-    
-          if (!response.ok) {
-            console.log(response.error);
-            return;
-          }
-          
-          const responseData = await response.json();
-          setCourse(responseData);
-        } catch (error) {
-          console.log(error.message);
-        } 
-        // finally {
-        //   setCourseLoading(false)
-        // }   
-      }
-
-    useEffect(() => {
-        getCourse()
-    }, [])
 
     return (
         <>
