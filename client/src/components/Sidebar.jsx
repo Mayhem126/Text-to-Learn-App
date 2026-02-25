@@ -10,8 +10,8 @@ const Sidebar = () => {
     const { getAccessTokenSilently } = useAuth0();
     const [course, setCourse] = useState({});
     const { courseId, moduleId, lessonId } = useParams();
-    const [showLessons, setShowLessons] = useState(null);
-    const [showSideBar, setShowSideBar] = useState(false);
+    const [showLessons, setShowLessons] = useState(moduleId);
+    const [showSideBar, setShowSideBar] = useState(true);
     const navigate = useNavigate();
 
     const getCourse = async () => {
