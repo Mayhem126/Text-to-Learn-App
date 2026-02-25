@@ -2,7 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import { BsLayoutSidebarInset } from "react-icons/bs";
+import { TbLayoutSidebarLeftCollapseFilled, TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 const serverURL = import.meta.env.VITE_SERVER_URL;
 
@@ -47,10 +47,10 @@ const Sidebar = () => {
 
     return (
         <>
-            <div className={`text-white bg-[#ffffff1a] flex flex-col p-2 items-center ${showSideBar ? "w-40 md:w-55 lg:w-65 xl:w-80 items-end" : "w-10"}`}>
+            <div className={`text-white bg-[#ffffff1a] flex flex-col p-2 items-center transition-all ${showSideBar ? "w-40 md:w-55 lg:w-65 xl:w-80 items-end" : "w-10"}`}>
                 {/* <h1 className="font-bold text-center text-xl xl:text-2xl mb-5 pb-5 border-b border-white/50">{course.title}</h1> */}
                 <div onClick={() => setShowSideBar((prev) => !prev)} className={`hover:bg-black/40 hover:rounded-sm py-1 px-2 cursor-pointer ${showSideBar && "relative left-1.5"}`}>
-                    <BsLayoutSidebarInset className=""/>
+                    {showSideBar ? <TbLayoutSidebarLeftCollapseFilled /> : <TbLayoutSidebarLeftExpandFilled />}
                 </div>
                 {showSideBar &&
                 <section>
