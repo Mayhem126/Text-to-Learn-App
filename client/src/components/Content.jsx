@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import LessonRenderer from "./LessonRenderer"
 const serverURL = import.meta.env.VITE_SERVER_URL
 
-const Content = ({ lesson, moduleName, courseTopic }) => {
+const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
     const [lessonContent, setLessonContent] = useState(lesson?.content?.content || [])
     const [objectives, setObjectives] = useState(lesson?.content?.objectives || [])
     const [loading, setLoading] = useState(false)
@@ -29,6 +29,7 @@ const Content = ({ lesson, moduleName, courseTopic }) => {
             const responseData = await response.json()
             setLessonContent(responseData.lesson.content[0].content)
             setObjectives(responseData.lesson.content[0].objectives)
+            await refetchCourse()
         } catch (error) {
             console.log(error.message)
         } finally {
