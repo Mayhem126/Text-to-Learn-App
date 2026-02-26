@@ -2,6 +2,7 @@ import Heading from "./blocks/Heading"
 import Paragraph from "./blocks/Paragraph"
 import MCQ from "./blocks/MCQ"
 import Code from "./blocks/Code"
+import Video from "./blocks/Video"
 
 const LessonRenderer = ({ content }) => {
     if (!content || content.length === 0) return null
@@ -33,6 +34,7 @@ const LessonRenderer = ({ content }) => {
                         return (
                             <div key={index}>
                                 {content[index - 1].type !== content[index].type && <p className="font-bold text-lg md:text-xl border-t-[1px] border-white/30 mt-5 py-5">Video</p>}
+                                <Video query={block.query}/>
                             </div>
                         )
                     case "code":
