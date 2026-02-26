@@ -7,6 +7,7 @@ connectToDatabase()
 
 const courseRoute = require("./src/routes/courseRoute")
 const lessonRoute = require("./src/routes/lessonRoute")
+const youtubeRoute = require("./src/routes/youtubeRoute")
 
 const app = express()
 
@@ -23,6 +24,7 @@ app.use(
 app.use(express.json())
 app.use("/api/courses", courseRoute)
 app.use("/api/lessons", lessonRoute)
+app.use("/api/youtube", youtubeRoute)
 
 app.listen(PORT, () => {
   console.log(`Connected to server at PORT ${PORT}`)

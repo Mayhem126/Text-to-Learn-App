@@ -8,6 +8,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL
 const PORT = process.env.PORT || 8080
 const MONGO_URI = process.env.MONGO_URI
 const GEMINI_KEY = process.env.GEMINI_KEY
+const YOUTUBE_KEY = process.env.YOUTUBE_KEY
 
 module.exports = {
     AUTH0_AUDIENCE,
@@ -15,5 +16,6 @@ module.exports = {
     FRONTEND_URL,
     PORT,
     MONGO_URI,
-    GEMINI_KEY
+    GEMINI_KEY,
+    YOUTUBE_KEY
 }
