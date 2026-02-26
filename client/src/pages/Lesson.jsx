@@ -12,7 +12,7 @@ const Lesson = () => {
     const { courseId, moduleId, lessonId } = useParams();
     
     const currentCourse = course?.title
-    const currentModule = course?.modules?.find((mod) => mod.id === moduleId.title)
+    const currentModule = course?.modules?.find((mod) => mod._id === moduleId)
     const currentLesson = course?.modules
     ?.find((mod) => mod._id === moduleId)
     ?.lessons?.find((lesson) => lesson._id === lessonId)
@@ -45,13 +45,13 @@ const Lesson = () => {
     }, [courseId])
 
     return (
-        <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#080814] to-[#1a0a1e]">
-            <Header userInfo={user} />
-            <div className="grow border border-white flex">
+        <div className="h-screen flex flex-col bg-gradient-to-b from-[#080814] to-[#1a0a1e] overflow-hidden">
+            <Header userInfo={user}/>
+            <div className="border border-white flex grow overflow-hidden">
                 <Sidebar course={course} />
                 <Content 
                     lesson={currentLesson}
-                    moduleName={currentModule}
+                    moduleName={currentModule?.title}
                     courseTopic={currentCourse}
                 />
             </div>
