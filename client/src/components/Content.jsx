@@ -10,8 +10,8 @@ const Content = ({ lesson, moduleName, courseTopic }) => {
     const { getAccessTokenSilently } = useAuth0()
 
     const enrichLesson = async () => {
-        try {
-            setLoading(true)
+        setLoading(true)
+        try {            
             const token = await getAccessTokenSilently()
             const response = await fetch(`${serverURL}/lessons/${lesson._id}/generate`, {
                 method: "PATCH",
@@ -51,7 +51,7 @@ const Content = ({ lesson, moduleName, courseTopic }) => {
 
     return (
         <div className="text-white py-5 px-10 md:px-15 lg:px-20 xl:px-25 mx-auto overflow-y-scroll">
-            <h1 className="font-bold text-3xl md:text-4xl mb-4">{lesson?.title}</h1>
+            <h1 className="font-bold text-3xl text-center md:text-4xl mb-4">{lesson?.title}</h1>
             {objectives.length > 0 && (
                 <div className="mb-6 mt-10 bg-white/5 border border-white/10 rounded-xl p-4">
                     <p className="text-sm text-[#e03278] font-semibold mb-2">What you'll learn</p>
@@ -65,7 +65,11 @@ const Content = ({ lesson, moduleName, courseTopic }) => {
                 </div>
             )}
             {loading
-                ? <p className="text-white/40">Generating lesson content...</p>
+                ? (
+                    <div className="flex justify-center grow my-auto">
+                        <p className="text-white/40 text-2xl">Generating lesson content...</p>
+                    </div>
+                )
                 : <LessonRenderer content={lessonContent} />
             }
         </div>
