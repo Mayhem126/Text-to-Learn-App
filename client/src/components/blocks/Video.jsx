@@ -34,7 +34,7 @@ const Video = ({ query }) => {
     }, [query])
 
     return (
-        <>
+        <div className="flex justify-center">
             {loading 
             ? <Loader /> 
             : errorMessage 
@@ -47,7 +47,7 @@ const Video = ({ query }) => {
                       />
                     : null
             }
-        </>        
+        </div>        
     );
 };
 
