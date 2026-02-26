@@ -8,9 +8,6 @@ const LessonRenderer = ({ content }) => {
     return (
         <div className="flex flex-col gap-5">
             {content.map((block, index) => {
-                if (index && content[index - 1] !== content[index]) {
-                    
-                }
                 switch(block.type) {
                     case "heading":
                         return (
@@ -41,7 +38,7 @@ const LessonRenderer = ({ content }) => {
                     case "code":
                         return (
                             <div key={index}>
-                                {content[index].type === 'code' && <p className="font-bold text-lg md:text-xl border-t-[1px] border-white/30 mt-5 py-5">Code</p>}
+                                {content[index - 1]?.type !== content[index].type && <p className="font-bold text-lg md:text-xl border-t-[1px] border-white/30 mt-5 py-5">Code</p>}
                                 <Code key={index} language={block.language} text={block.text}/>
                             </div>
                         )
