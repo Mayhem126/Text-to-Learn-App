@@ -1,9 +1,11 @@
 import { useAuth0 } from "@auth0/auth0-react"
 import { useEffect, useState } from "react"
+import LessonRenderer from "./LessonRenderer"
 const serverURL = import.meta.env.VITE_SERVER_URL
 
 const Content = ({ lesson, moduleName, courseTopic }) => {
-    const [lessonContent, setLessonContent] = useState(lesson?.content || [])
+    const [lessonContent, setLessonContent] = useState(lesson?.content?.content || [])
+    const [objectives, setObjectives] = useState(lesson?.content?.objectives || [])
     const [loading, setLoading] = useState(false)
     const { getAccessTokenSilently } = useAuth0()
 
@@ -25,7 +27,8 @@ const Content = ({ lesson, moduleName, courseTopic }) => {
             })
             if (!response.ok) return
             const responseData = await response.json()
-            setLessonContent(responseData.content)
+            setLessonContent(responseData.lesson.content[0].content)
+            setObjectives(responseData.lesson.content[0].objectives)
         } catch (error) {
             console.log(error.message)
         } finally {
@@ -34,20 +37,36 @@ const Content = ({ lesson, moduleName, courseTopic }) => {
     }
 
     useEffect(() => {
+        console.log("lesson received:", lesson)
+        console.log("lesson.content:", lesson?.content)
         if (lesson && !lesson.isEnriched) {
             enrichLesson()
         } else {
-            setLessonContent(lesson?.content || [])
+            setLessonContent(lesson?.content?.[0]?.content || [])
+            setObjectives(lesson?.content?.[0]?.objectives || [])
         }
+        // console.log(lessonContent)
+        console.log("lessonContent", lessonContent)
     }, [lesson?._id])
-    // console.log(lesson)
-    // console.log(lesson?.content)
+
     return (
-        <div className="text-white grow p-6">
-            <h1 className="font-bold text-2xl md:text-4xl mb-4">{lesson?.title}</h1>
+        <div className="text-white py-5 px-10 md:px-15 lg:px-20 xl:px-25 mx-auto overflow-y-scroll">
+            <h1 className="font-bold text-3xl md:text-4xl mb-4">{lesson?.title}</h1>
+            {objectives.length > 0 && (
+                <div className="mb-6 mt-10 bg-white/5 border border-white/10 rounded-xl p-4">
+                    <p className="text-sm text-[#e03278] font-semibold mb-2">What you'll learn</p>
+                    <ul className="flex flex-col gap-1">
+                        {objectives.map((obj, i) => (
+                            <li key={i} className="text-white/60 text-sm flex gap-2">
+                                <span className="text-[#e03278]">✓</span> {obj}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
             {loading
-                ? <p className="text-white/40">Loading...</p>
-                : <p>Content</p>
+                ? <p className="text-white/40">Generating lesson content...</p>
+                : <LessonRenderer content={lessonContent} />
             }
         </div>
     )
