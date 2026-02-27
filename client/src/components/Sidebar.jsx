@@ -13,13 +13,13 @@ const Sidebar = ({ course }) => {
 
     return (
         <>
-            <div className={`text-white bg-[#ffffff1a] flex-shrink-0 flex flex-col p-2 items-center transition-all ${showSideBar ? "w-40 md:w-55 lg:w-65 xl:w-80 items-end" : "w-10"}`}>
+            <div className={`text-white bg-[#ffffff1a] flex-shrink-0 flex flex-col p-2 items-center transition-all ${showSideBar ? "w-40 md:w-55 lg:w-65 xl:w-80" : "w-10"}`}>
                 {/* <h1 className="font-bold text-center text-xl xl:text-2xl mb-5 pb-5 border-b border-white/50">{course.title}</h1> */}
-                <div onClick={() => setShowSideBar((prev) => !prev)} className={`hover:bg-black/40 hover:rounded-sm py-1 px-2 cursor-pointer ${showSideBar && "relative left-1.5"}`}>
+                <div onClick={() => setShowSideBar((prev) => !prev)} className={`hover:bg-black/40 hover:rounded-sm py-1 px-2 cursor-pointer ${showSideBar && "relative left-1.5 self-end"}`}>
                     {showSideBar ? <TbLayoutSidebarLeftCollapseFilled /> : <TbLayoutSidebarLeftExpandFilled />}
                 </div>
                 {showSideBar &&
-                <section>
+                <section className="w-full">
                     <ul>
                         {course?.modules?.map((mod) => (
                             <li key={mod._id} className="w-full py-2 border-b border-white/50">
