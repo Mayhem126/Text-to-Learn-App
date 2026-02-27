@@ -12,15 +12,15 @@ const Video = ({ query }) => {
     const findVideo = async () => {
         setLoading(true)
         try {
-            if (localStorage.getItem(`${query}`) !== null)
-                return localStorage.getItem(`${query}`)
+            if (localStorage.getItem(`video-${query}`) !== null)
+                return localStorage.getItem(`video-${query}`)
             const token = await getAccessTokenSilently()
             const response = await fetch(`${serverURL}/youtube?query=${encodeURIComponent(query)}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             const data = await response.json()
             if (data.videoId)
-                localStorage.setItem(`${query}`, data.videoId)
+                localStorage.setItem(`video-${query}`, data.videoId)
             return data.videoId
         } catch (error) {
             setErrorMessage("Couldn't load video.")
