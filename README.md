@@ -89,5 +89,5 @@ In your Auth0 Dashboard:
 
 ## Deployment
 
-- Backend: [Render]()
-- Frontend: [Vercel]()
+- Backend: [Render](https://text-to-learn-app-xmlm.onrender.com)
+- Frontend: [Vercel](https://text-to-learn-app.vercel.app/)
