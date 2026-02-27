@@ -46,7 +46,7 @@ Create a `.env` file based on `.env.example`:
 AUTH0_AUDIENCE=
 AUTH0_ISSUER=
 FRONTEND_URL=
-PORT=8080
+PORT=
 MONGO_URI=
 GEMINI_KEY=
 YOUTUBE_KEY=
