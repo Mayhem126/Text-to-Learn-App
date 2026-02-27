@@ -45,9 +45,9 @@ const Lesson = () => {
     }, [courseId])
 
     return (
-        <div className="h-screen flex flex-col bg-gradient-to-b from-[#080814] to-[#1a0a1e] overflow-hidden">
+        <div className="h-screen flex flex-col bg-gradient-to-b from-[#080814] to-[#1a0a1e]">
             <Header userInfo={user}/>
-            <div className="border border-white flex grow overflow-hidden">
+            <div className="border border-white flex flex-1 min-h-0">
                 <Sidebar course={course} />
                 <Content 
                     lesson={currentLesson}

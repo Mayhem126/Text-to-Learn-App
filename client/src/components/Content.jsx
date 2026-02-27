@@ -51,29 +51,32 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
     }, [lesson?._id])
 
     return (
-        <div className="text-white py-5 px-10 md:px-15 lg:px-20 xl:px-25 mx-auto overflow-y-scroll">
-            <h1 className="font-bold text-3xl text-center md:text-4xl mb-4">{lesson?.title}</h1>
-            {objectives.length > 0 && (
-                <div className="mb-6 mt-10 bg-white/5 border border-white/10 rounded-xl p-4">
-                    <p className="text-sm text-[#e03278] font-semibold mb-2">What you'll learn</p>
-                    <ul className="flex flex-col gap-1">
-                        {objectives.map((obj, i) => (
-                            <li key={i} className="text-white/60 text-sm flex gap-2">
-                                <span className="text-[#e03278]">✓</span> {obj}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            {loading
-                ? (
-                    <div className="flex justify-center grow my-auto">
-                        <p className="text-white/40 text-2xl">Generating lesson content...</p>
+        <div className="flex-1 min-h-0 overflow-y-auto">
+            <div className="text-white py-5 px-10 md:px-15 lg:px-20 xl:px-25 max-w-4xl mx-auto">
+                <h1 className="font-bold text-3xl text-center md:text-4xl mb-4">{lesson?.title}</h1>
+                {objectives.length > 0 && (
+                    <div className="mb-6 mt-10 bg-white/5 border border-white/10 rounded-xl p-4">
+                        <p className="text-sm text-[#e03278] font-semibold mb-2">What you'll learn</p>
+                        <ul className="flex flex-col gap-1">
+                            {objectives.map((obj, i) => (
+                                <li key={i} className="text-white/60 text-sm flex gap-2">
+                                    <span className="text-[#e03278]">✓</span> {obj}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                )
-                : <LessonRenderer content={lessonContent} />
-            }
+                )}
+                {loading
+                    ? (
+                        <div className="flex justify-center grow my-auto">
+                            <p className="text-white/40 text-2xl">Generating lesson content...</p>
+                        </div>
+                    )
+                    : <LessonRenderer content={lessonContent} />
+                }
+            </div>
         </div>
+
     )
 }
 
