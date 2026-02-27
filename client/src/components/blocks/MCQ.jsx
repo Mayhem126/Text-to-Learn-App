@@ -7,12 +7,17 @@ const MCQ = ({ question, options, answer, explanation }) => {
     useEffect(() => {
         setSelectedOption(null);
         setShowAnswer(false);
+        if (localStorage.getItem(`question-${question}`) !== null) {
+            setSelectedOption(Number(localStorage.getItem(`question-${question}`)));
+            setShowAnswer(true);
+        }
     }, [question]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (selectedOption !== null) {
             setShowAnswer(true);
+            localStorage.setItem(`question-${question}`, selectedOption)
         }
     };
 
