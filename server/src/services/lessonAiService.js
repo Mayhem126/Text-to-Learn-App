@@ -38,10 +38,8 @@ const generateLessonContent = async (courseTopic, moduleName, lessonName) => {
             }
         })
 
-        console.log("Raw lesson response:", response.text)
         return JSON.parse(response.text)
     } catch (error) {
-        console.log("Gemini lesson error:", error)
         throw error
     }
 }

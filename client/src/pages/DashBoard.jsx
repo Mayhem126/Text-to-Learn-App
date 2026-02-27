@@ -11,6 +11,7 @@ const DashBoard = () => {
   const [generateLoading, setGenerateLoading] = useState(false);
   const [courses, setCourses] = useState([]);
   const [courseLoading, setCourseLoading] = useState(false);
+  const [courseError, setCourseError] = useState(null)
   const navigate = useNavigate();
 
   const getCourses = async () => {
@@ -26,14 +27,14 @@ const DashBoard = () => {
       });
 
       if (!response.ok) {
-        console.log(response.error);
+        setCourseError(`Failed to fetch courses. Please try again`)
         return;
       }
       
       const responseData = await response.json();
       setCourses(responseData);
     } catch (error) {
-      console.log(error.message);
+      setCourseError(`Failed to fetch courses. Please try again`)
     } finally {
       setCourseLoading(false)
     }   
@@ -67,7 +68,6 @@ const DashBoard = () => {
         return;
       }
 
-      console.log("Generated course:", responseData);
       setMessage(`Course "${responseData.course.title}" generated successfully!`);
       setTopic("");
       getCourses();
@@ -109,17 +109,26 @@ const DashBoard = () => {
             </p>
           )
         }
-        {courseLoading ? (<p className="mt-20 text-xl">Fetching Courses</p>) : (
-          <div className="mt-20 border-t border-white/30 w-full max-w-3xl flex flex-col">
-            <h2 className="mt-5 text-2xl sm:text-3xl">Courses</h2>
-            {courses.length === 0 ? (
-              <p className="mt-5 text-white/40 text-sm sm:text-lg">No courses created yet</p>
-            ) : (<ul>
-              {courses.map((course) => (
-                <li key={course._id} onClick={() => navigate(`/course/${course._id}/module/${course.modules[0]._id}/lesson/${course.modules[0].lessons[0]._id}`)} className="my-5 text-lg sm:text-xl hover:text-[#e03278] cursor-pointer transition duration-300 hover:drop-shadow-[0px_0px_3px_#e03278] hover:drop-shadow-[0px_0px_5px_#e35990]">{course.title}</li>
-              ))}
-            </ul>)}
-          </div>
+        {courseLoading 
+          ? (<p className="mt-20 text-xl">Fetching Courses</p>) 
+          : courseError
+            ? (<p className="mt-20 text-xl">{courseError}</p>) 
+            : (
+                <div className="mt-20 border-t border-white/30 w-full max-w-3xl flex flex-col">
+                  <h2 className="mt-5 text-2xl sm:text-3xl">Courses</h2>
+                  {courses.length === 0 ? (
+                    <p className="mt-5 text-white/40 text-sm sm:text-lg">No courses created yet</p>
+                  ) : (<ul>
+                    {courses.map((course) => (
+                      <li key={course._id} onClick={() => {
+                        const firstModule = course.modules?.[0]
+                        const firstLesson = firstModule?.lessons?.[0]
+                        if (!firstModule || !firstLesson) return
+                        navigate(`/course/${course._id}/module/${firstModule._id}/lesson/${firstLesson._id}`)
+                      }} className="my-5 text-lg sm:text-xl hover:text-[#e03278] cursor-pointer transition duration-300 hover:drop-shadow-[0px_0px_3px_#e03278] hover:drop-shadow-[0px_0px_5px_#e35990]">{course.title}</li>
+                    ))}
+                  </ul>)}
+                </div>
         )}
       </div>
     </div>

@@ -20,7 +20,6 @@ const courseSchema = z.object({
 })
 
 const generateCourse = async (topic) => {
-    console.log("Gemini key exists:", !!GEMINI_KEY)
     const ai = new GoogleGenAI({ apiKey: GEMINI_KEY })
 
     try {
@@ -53,11 +52,9 @@ const generateCourse = async (topic) => {
             }
         })
 
-        console.log("Raw Gemini response:", response.text)
         const parsed = courseSchema.parse(JSON.parse(response.text))
         return parsed
     } catch (error) {
-        console.log("Gemini error:", error)
         throw error
     }
 }

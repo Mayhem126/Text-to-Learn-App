@@ -9,6 +9,7 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
     const [lessonContent, setLessonContent] = useState(lesson?.content?.content || [])
     const [objectives, setObjectives] = useState(lesson?.content?.objectives || [])
     const [loading, setLoading] = useState(false)
+    const [enrichError, setEnrichError] = useState(null)
     const { getAccessTokenSilently } = useAuth0()
 
     const downloadPDF = () => {
@@ -25,7 +26,7 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
             pdf.setTextColor(...color)
             const lines = pdf.splitTextToSize(text, maxWidth)
             lines.forEach(line => {
-                if (y > 270) { addNewPage(); y = 20 }
+                if (y > 270) { addNewPage() }
                 pdf.text(line, margin, y)
                 y += fontSize * 0.5
             })
@@ -100,29 +101,28 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
                     lesson: lesson.title
                 })
             })
-            if (!response.ok) return
+            if (!response.ok) {
+                setEnrichError("Failed to generate lesson content. Please try again.")
+                return
+            }
             const responseData = await response.json()
             setLessonContent(responseData.lesson.content[0].content)
             setObjectives(responseData.lesson.content[0].objectives)
             await refetchCourse()
         } catch (error) {
-            console.log(error.message)
+            setEnrichError("Failed to generate lesson content. Please try again.")
         } finally {
             setLoading(false)
         }        
     }
 
     useEffect(() => {
-        console.log("lesson received:", lesson)
-        console.log("lesson.content:", lesson?.content)
         if (lesson && !lesson.isEnriched) {
             enrichLesson()
         } else {
             setLessonContent(lesson?.content?.[0]?.content || [])
             setObjectives(lesson?.content?.[0]?.objectives || [])
         }
-        // console.log(lessonContent)
-        console.log("lessonContent", lessonContent)
     }, [lesson?._id])
 
     return (
@@ -148,7 +148,11 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
                             <p className="text-white/40 text-2xl">Generating lesson content...</p>
                         </div>
                     )
-                    : <LessonRenderer content={lessonContent} />
+                    : enrichError
+                        ? <div className="flex justify-center grow my-auto">
+                            <p className="text-white/40 text-2xl">{enrichError}</p>
+                        </div> 
+                        : <LessonRenderer content={lessonContent} />
                 }
             </div>
         </div>

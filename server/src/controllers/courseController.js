@@ -33,8 +33,6 @@ const saveCourse = async (req, res) => {
 
 const generateAndSaveCourse = async (req, res) => {
     try {
-        console.log("req.auth:", req.auth)
-        console.log("Generating course for topic:", req.body.topic)
         const user = req.auth.payload.sub
         const { topic } = req.body
 
