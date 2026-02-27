@@ -12,11 +12,15 @@ const Video = ({ query }) => {
     const findVideo = async () => {
         setLoading(true)
         try {
+            if (localStorage.getItem(`${query}`) !== null)
+                return localStorage.getItem(`${query}`)
             const token = await getAccessTokenSilently()
             const response = await fetch(`${serverURL}/youtube?query=${encodeURIComponent(query)}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             const data = await response.json()
+            if (data.videoId)
+                localStorage.setItem(`${query}`, data.videoId)
             return data.videoId
         } catch (error) {
             setErrorMessage("Couldn't load video.")
@@ -42,7 +46,7 @@ const Video = ({ query }) => {
                 : videoId 
                     ? <iframe
                         src={`https://www.youtube.com/embed/${videoId}`}
-                        className="max-w-4xl mx-auto aspect-video"
+                        className="max-w-4xl w-full mx-auto aspect-video"
                         allowFullScreen
                       />
                     : null
