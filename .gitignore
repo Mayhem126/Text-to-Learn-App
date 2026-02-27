@@ -5,6 +5,7 @@
 .env.*
 client/.env
 server/.env
+!.env.example
 
 # =========================
 # DEPENDENCIES
