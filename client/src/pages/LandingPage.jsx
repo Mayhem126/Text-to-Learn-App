@@ -2,7 +2,7 @@ import { LoginButton, SignupButton } from "../components/auth";
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#080814] to-[#1a0a1e] text-white">
+    <div className="min-h-dvh flex flex-col bg-gradient-to-b from-[#080814] to-[#1a0a1e] text-white">
       <div className="flex justify-between items-center px-6 py-4 border-b border-white/5">
         <div className="text-[#e03278] text-xl font-extrabold tracking-tight">
           ✦ Text-to-Learn

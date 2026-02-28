@@ -79,7 +79,7 @@ const DashBoard = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#080814] to-[#1a0a1e] text-white">
+    <div className="min-h-dvh flex flex-col bg-gradient-to-b from-[#080814] to-[#1a0a1e] text-white">
       <Header userInfo={user} />
       <div className="flex flex-col items-center pt-5 grow px-4">
         <h1 className="text-3xl sm:text-4xl font-bold mb-8 text-center">

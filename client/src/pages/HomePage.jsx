@@ -8,7 +8,7 @@ const HomePage = () => {
     const { isAuthenticated, isLoading, error } = useAuth0();
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-[#080814] to-[#1a0a1e]">
+            <div className="flex justify-center items-center min-h-dvh bg-gradient-to-b from-[#080814] to-[#1a0a1e]">
                 <Loader />
             </div>
         );
@@ -16,7 +16,7 @@ const HomePage = () => {
 
     if (error) {
         return (
-            <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-b from-[#080814] to-[#1a0a1e] text-white">
+            <div className="flex flex-col justify-center items-center min-h-dvh bg-gradient-to-b from-[#080814] to-[#1a0a1e] text-white">
                 <h1>Something went wrong</h1>
                 <h2>{error.message}</h2>
             </div>
