@@ -12,16 +12,11 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
     const [loading, setLoading] = useState(false)
     const [enrichError, setEnrichError] = useState(null)
     const { getAccessTokenSilently } = useAuth0()
-    const [position, setPosition] = useState(0)
     const scrollRef = useRef(null)
 
     const handleScrollUp = () => {
         scrollRef.current.scrollTo({ top: 0, behavior: "smooth" })
     }
-
-    useEffect(() => {
-        setPosition(scrollRef.current.scrollTop)
-    }, [scrollRef.current])
 
     const enrichLesson = async () => {
         setLoading(true)
@@ -92,7 +87,7 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
                         </div> 
                         : <LessonRenderer content={lessonContent} />
                 }
-                <div className="fixed bottom-5 right-5 md:text-xl md:right-8 hover:cursor-pointer" onClick={handleScrollUp}><FaChevronCircleUp />
+                <div className="fixed bottom-5 right-6.5 md:text-xl md:right-8 lg:right-10 xl:right-12 hover:cursor-pointer" onClick={handleScrollUp}><FaChevronCircleUp />
                 </div>
             </div>
         </div>
