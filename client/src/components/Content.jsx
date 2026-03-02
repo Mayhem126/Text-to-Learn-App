@@ -1,9 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import LessonRenderer from "./LessonRenderer"
 import { IoDownload } from "react-icons/io5";
-import { jsPDF } from "jspdf"
 import downloadPDF from "../utils/pdfDownload"
+import { FaChevronCircleUp } from "react-icons/fa";
 const serverURL = import.meta.env.VITE_SERVER_URL
 
 const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
@@ -12,6 +12,16 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
     const [loading, setLoading] = useState(false)
     const [enrichError, setEnrichError] = useState(null)
     const { getAccessTokenSilently } = useAuth0()
+    const [position, setPosition] = useState(0)
+    const scrollRef = useRef(null)
+
+    const handleScrollUp = () => {
+        scrollRef.current.scrollTo({ top: 0, behavior: "smooth" })
+    }
+
+    useEffect(() => {
+        setPosition(scrollRef.current.scrollTop)
+    }, [scrollRef.current])
 
     const enrichLesson = async () => {
         setLoading(true)
@@ -54,7 +64,7 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
     }, [lesson?._id])
 
     return (
-        <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="flex-1 min-h-0 overflow-y-auto" ref={scrollRef}>
             <div className="relative text-white py-5 px-10 md:px-15 lg:px-20 xl:px-25 max-w-8xl mx-auto">
                 <IoDownload onClick={() => downloadPDF(lesson, objectives, lessonContent)} className="absolute right-3 top-3 cursor-pointer text-xl md:text-2xl hover:bg-white hover:text-black rounded-sm duration-200"/>
                 <h1 className="font-bold text-3xl text-center md:text-4xl mb-4">{lesson?.title}</h1>
@@ -82,6 +92,8 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
                         </div> 
                         : <LessonRenderer content={lessonContent} />
                 }
+                <div className="fixed bottom-5 right-5 md:text-xl md:right-8 hover:cursor-pointer" onClick={handleScrollUp}><FaChevronCircleUp />
+                </div>
             </div>
         </div>
 
