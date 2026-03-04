@@ -5,9 +5,11 @@ import { IoDownload } from "react-icons/io5";
 import downloadPDF from "../utils/pdfDownload"
 import { FaChevronCircleUp } from "react-icons/fa";
 import LessonNavigate from "./LessonNavigate";
+import { useParams } from "react-router-dom";
 const serverURL = import.meta.env.VITE_SERVER_URL
 
 const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule, allModules }) => {
+    const { lessonId } = useParams()
     const [lessonContent, setLessonContent] = useState(lesson?.content?.content || [])
     const [objectives, setObjectives] = useState(lesson?.content?.objectives || [])
     const [loading, setLoading] = useState(false)
@@ -18,6 +20,10 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule
     const handleScrollUp = () => {
         scrollRef.current.scrollTo({ top: 0, behavior: "smooth" })
     }
+
+    useEffect(() => {
+        scrollRef.current.scrollTo({ top: 0 })
+    }, [lessonId])
 
     const enrichLesson = async () => {
         setLoading(true)
