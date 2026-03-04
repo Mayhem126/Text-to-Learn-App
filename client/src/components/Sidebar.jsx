@@ -7,9 +7,13 @@ import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ course }) => {
     const { courseId, moduleId, lessonId } = useParams();
-    const [showLessons, setShowLessons] = useState(moduleId);
+    const [showLessons, setShowLessons] = useState(null);
     const [showSideBar, setShowSideBar] = useState(true);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setShowLessons(moduleId)
+    }, [moduleId])
 
     return (
         <>
