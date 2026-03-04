@@ -4,9 +4,10 @@ import LessonRenderer from "./LessonRenderer"
 import { IoDownload } from "react-icons/io5";
 import downloadPDF from "../utils/pdfDownload"
 import { FaChevronCircleUp } from "react-icons/fa";
+import LessonNavigate from "./LessonNavigate";
 const serverURL = import.meta.env.VITE_SERVER_URL
 
-const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
+const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule, allModules }) => {
     const [lessonContent, setLessonContent] = useState(lesson?.content?.content || [])
     const [objectives, setObjectives] = useState(lesson?.content?.objectives || [])
     const [loading, setLoading] = useState(false)
@@ -87,6 +88,7 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse }) => {
                         </div> 
                         : <LessonRenderer content={lessonContent} />
                 }
+                <LessonNavigate currentModule={currentModule} allModules={allModules}/>
                 <div className="fixed bottom-5 right-6.5 md:text-xl md:right-8 lg:right-10 xl:right-12 hover:cursor-pointer" onClick={handleScrollUp}><FaChevronCircleUp />
                 </div>
             </div>

@@ -68,6 +68,8 @@ const Lesson = () => {
                     moduleName={currentModule?.title}
                     courseTopic={currentCourse}
                     refetchCourse={getCourse}
+                    currentModule={currentModule}
+                    allModules={course?.modules}
                 />}
             </div>
         </div>
