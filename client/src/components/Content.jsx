@@ -68,7 +68,7 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule
     return (
         <div className="flex-1 min-h-0 overflow-y-auto" ref={scrollRef}>
             <div className="relative text-white py-5 px-10 md:px-15 lg:px-20 xl:px-25 max-w-8xl mx-auto">
-                <IoDownload onClick={() => downloadPDF(lesson, objectives, lessonContent)} className="absolute right-3 top-3 cursor-pointer text-xl md:text-2xl hover:bg-white hover:text-black rounded-sm duration-200"/>
+                {!loading && <IoDownload onClick={() => downloadPDF(lesson, objectives, lessonContent)} className="absolute right-3 top-3 cursor-pointer text-xl md:text-2xl hover:bg-white hover:text-black rounded-sm duration-200"/>}
                 <h1 className="font-bold text-3xl text-center md:text-4xl mb-4">{lesson?.title}</h1>
                 {objectives.length > 0 && (
                     <div className="mb-6 mt-10 bg-white/5 border border-white/10 rounded-xl p-4">
@@ -94,9 +94,9 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule
                         </div> 
                         : <LessonRenderer content={lessonContent} />
                 }
-                <LessonNavigate currentModule={currentModule} allModules={allModules}/>
-                <div className="fixed bottom-5 right-6.5 md:text-xl md:right-8 lg:right-10 xl:right-12 hover:cursor-pointer" onClick={handleScrollUp}><FaChevronCircleUp />
-                </div>
+                {!loading && <LessonNavigate currentModule={currentModule} allModules={allModules}/>}
+                {!loading && <div className="fixed bottom-5 right-6.5 md:text-xl md:right-8 lg:right-10 xl:right-12 hover:cursor-pointer" onClick={handleScrollUp}><FaChevronCircleUp />
+                </div>}
             </div>
         </div>
 
