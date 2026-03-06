@@ -38,8 +38,8 @@ const LessonNavigate = ({ currentModule, allModules}) => {
 
     return (
         <div className="flex justify-around mt-10">
-            {!isFirstLesson && <MdNavigateBefore onClick={handleBefore} className="text-5xl hover:text-6xl hover:cursor-pointer ease-out duration-200 hover:drop-shadow-[0px_0px_15px_#fff]"/>}
-            {!isLastLesson && <MdNavigateNext onClick={handleNext} className="text-5xl align-top hover:text-6xl hover:cursor-pointer ease-out duration-200 hover:drop-shadow-[0px_0px_15px_#fff]"/>}
+            {<MdNavigateBefore onClick={handleBefore} className={`text-5xl ${isFirstLesson && "text-white/50"} ${!isFirstLesson && "hover:text-6xl hover:cursor-pointer ease-out duration-200 hover:drop-shadow-[0px_0px_15px_#fff]"}`}/>}
+            {<MdNavigateNext onClick={handleNext} className={`text-5xl ${isLastLesson && "text-white/50"} ${!isLastLesson && "hover:text-6xl hover:cursor-pointer ease-out duration-200 hover:drop-shadow-[0px_0px_15px_#fff]"}`}/>}
         </div>
     )
 }
