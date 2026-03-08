@@ -87,7 +87,7 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule
                 {loading
                     ? (
                         <div className="flex justify-center grow my-auto">
-                            <p className="text-white/40 text-2xl">Generating lesson content...</p>
+                            <p className="text-white/40 text-2xl">Generating lesson content, kindly don't change the lesson.</p>
                         </div>
                     )
                     : enrichError
