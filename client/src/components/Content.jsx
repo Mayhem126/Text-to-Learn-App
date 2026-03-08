@@ -57,6 +57,8 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule
     }
 
     useEffect(() => {
+        setLoading(false)
+        setEnrichError(null)
         if (lesson && !lesson.isEnriched) {
             enrichLesson()
         } else {
