@@ -29,7 +29,7 @@ const generateLessonContent = async (courseTopic, moduleName, lessonName) => {
             - Start with a heading block introducing the lesson
             - Include 3-5 paragraph blocks explaining key concepts clearly
             - Include a code block ONLY if the topic is programming-related
-            - Include exactly 1 video block with a specific search query
+            - Include upto 3 video blocks with a specific search query for each video
             - Include exactly 4-5 MCQ blocks at the end
             - Each MCQ must have exactly 4 options, an answer index (0-3), and an explanation
             - Return ONLY the JSON, nothing else`,
