@@ -16,6 +16,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:3000",
+      "https://text-to-learn.swastikdattagupta.in",
       FRONTEND_URL,
     ],
     credentials: true,
