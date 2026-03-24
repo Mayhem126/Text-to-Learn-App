@@ -1,0 +1,26 @@
+services:
+  client:
+    build:
+      context: ./client
+      args:
+        VITE_SERVER_URL: http://localhost:8080/api
+        VITE_AUTH0_DOMAIN: dev-mha083yrmzwhcg81.us.auth0.com
+        VITE_AUTH0_CLIENT_ID: dmCwt9BgmK75aUpNQEovNRdPQUrveExE
+        VITE_AUTH0_AUDIENCE: https://coursegenerator.com/
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./server/.env
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
