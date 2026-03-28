@@ -1,21 +1,44 @@
 import { useAuth0 } from "@auth0/auth0-react"
 import { useEffect, useState, useRef } from "react"
 import LessonRenderer from "./LessonRenderer"
-import { IoDownload } from "react-icons/io5";
+import { IoDownload } from "react-icons/io5"
 import downloadPDF from "../utils/pdfDownload"
-import { FaChevronCircleUp } from "react-icons/fa";
-import LessonNavigate from "./LessonNavigate";
-import { useParams } from "react-router-dom";
+import { FaChevronCircleUp } from "react-icons/fa"
+import LessonNavigate from "./LessonNavigate"
+import { useParams } from "react-router-dom"
 const serverURL = import.meta.env.VITE_SERVER_URL
 
-const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule, allModules }) => {
-    const { lessonId } = useParams()
-    const [lessonContent, setLessonContent] = useState(lesson?.content?.content || [])
-    const [objectives, setObjectives] = useState(lesson?.content?.objectives || [])
+const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule, allModules, course }) => {
+    const { lessonId, moduleId } = useParams()
+    const [lessonContent, setLessonContent] = useState(lesson?.content?.[0]?.content || [])
+    const [objectives, setObjectives] = useState(lesson?.content?.[0]?.objectives || [])
     const [loading, setLoading] = useState(false)
     const [enrichError, setEnrichError] = useState(null)
     const { getAccessTokenSilently } = useAuth0()
     const scrollRef = useRef(null)
+    const enrichingLessonId = useRef(null)
+    const courseRef = useRef(course)
+
+    useEffect(() => {
+        courseRef.current = course
+    }, [course])
+
+    const lessons = currentModule?.lessons
+    const currentLessonIndex = lessons?.findIndex(l => l._id === lessonId)
+    const moduleIndex = allModules?.findIndex(m => m._id === moduleId)
+
+    let nextLesson = null
+    let nextModuleName = null
+    if (currentLessonIndex < lessons?.length - 1) {
+        nextLesson = lessons[currentLessonIndex + 1]
+        nextModuleName = moduleName
+    } else {
+        const nextModule = allModules?.[moduleIndex + 1]
+        if (nextModule) {
+            nextLesson = nextModule.lessons[0]
+            nextModuleName = nextModule.title
+        }
+    }
 
     const handleScrollUp = () => {
         scrollRef.current.scrollTo({ top: 0, behavior: "smooth" })
@@ -26,10 +49,13 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule
     }, [lessonId])
 
     const enrichLesson = async () => {
+        const thisLessonId = lesson._id
+        enrichingLessonId.current = thisLessonId
         setLoading(true)
-        try {            
+        try {
             const token = await getAccessTokenSilently()
-            const response = await fetch(`${serverURL}/lessons/${lesson._id}/generate`, {
+
+            await fetch(`${serverURL}/lessons/${lesson._id}/generate`, {
                 method: "PATCH",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -38,22 +64,45 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule
                 body: JSON.stringify({
                     topic: courseTopic,
                     module: moduleName,
-                    lesson: lesson.title
+                    lesson: lesson.title,
+                    nextLessonId: nextLesson?._id || null,
+                    nextModuleName: nextModuleName || null,
+                    nextLessonName: nextLesson?.title || null
                 })
             })
-            if (!response.ok) {
-                setEnrichError("Failed to generate lesson content. Please try again.")
-                return
+
+            const poll = async () => {
+                if (enrichingLessonId.current !== thisLessonId) return
+            
+                await refetchCourse()
+            
+                const updatedLesson = courseRef.current?.modules
+                    ?.find(m => m._id === moduleId)
+                    ?.lessons?.find(l => l._id === thisLessonId)
+            
+                if (updatedLesson?.isEnriched) {
+                    if (enrichingLessonId.current === thisLessonId) {
+                        setLessonContent(updatedLesson.content[0].content)
+                        setObjectives(updatedLesson.content[0].objectives)
+                        setLoading(false)
+                    }
+                } else if (updatedLesson?.enrichFailed) {
+                    if (enrichingLessonId.current === thisLessonId) {
+                        setEnrichError("Failed to generate lesson content. Please try again.")
+                        setLoading(false)
+                    }
+                } else {
+                    setTimeout(poll, 3000)
+                }
             }
-            const responseData = await response.json()
-            setLessonContent(responseData.lesson.content[0].content)
-            setObjectives(responseData.lesson.content[0].objectives)
-            await refetchCourse()
+
+            poll()
         } catch (error) {
-            setEnrichError("Failed to generate lesson content. Please try again.")
-        } finally {
-            setLoading(false)
-        }        
+            if (enrichingLessonId.current === thisLessonId) {
+                setEnrichError("Failed to generate lesson content. Please try again.")
+                setLoading(false)
+            }
+        }
     }
 
     useEffect(() => {
@@ -85,23 +134,21 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule
                     </div>
                 )}
                 {loading
-                    ? (
-                        <div className="flex justify-center grow my-auto">
-                            <p className="text-white/40 text-2xl">Generating lesson content, kindly don't change the lesson.</p>
-                        </div>
-                    )
+                    ? <div className="flex justify-center grow my-auto">
+                        <p className="text-white/40 text-2xl">Generating lesson content, kindly don't change the lesson.</p>
+                      </div>
                     : enrichError
                         ? <div className="flex justify-center grow my-auto">
                             <p className="text-white/40 text-2xl">{enrichError}</p>
-                        </div> 
+                          </div>
                         : <LessonRenderer content={lessonContent} />
                 }
                 {!loading && <LessonNavigate currentModule={currentModule} allModules={allModules}/>}
-                {!loading && <div className="fixed bottom-5 right-6.5 md:text-xl md:right-8 lg:right-10 xl:right-12 hover:cursor-pointer" onClick={handleScrollUp}><FaChevronCircleUp />
+                {!loading && <div className="fixed bottom-5 right-6.5 md:text-xl md:right-8 lg:right-10 xl:right-12 hover:cursor-pointer" onClick={handleScrollUp}>
+                    <FaChevronCircleUp />
                 </div>}
             </div>
         </div>
-
     )
 }
 

@@ -11,7 +11,7 @@ const Lesson = () => {
     const [course, setCourse] = useState({});
     const { user, getAccessTokenSilently } = useAuth0();
     const { courseId, moduleId, lessonId } = useParams();
-    const [loading, setLoading] = useState(false);
+    const [initialLoading, setInitialLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
     
     const currentCourse = course?.title
@@ -20,31 +20,26 @@ const Lesson = () => {
     ?.find((mod) => mod._id === moduleId)
     ?.lessons?.find((lesson) => lesson._id === lessonId)
 
-    const getCourse = async () => {
-        setLoading(true);
+    const getCourse = async (isRefetch = false) => {
+        if (!isRefetch) setInitialLoading(true)
         try {
           const token = await getAccessTokenSilently();
-    
           const response = await fetch(`${serverURL}/courses/${courseId}`, {
             method: "GET",
             headers: {
               Authorization: `Bearer ${token}`
             },
           });
-    
           if (!response.ok) {
-            console.log(response.error);
             setErrorMessage("Failed to retrieve course content")
             return;
           }
-          
           const responseData = await response.json();
           setCourse(responseData);
         } catch (error) {
-          console.log(error.message);
           setErrorMessage("Failed to retrieve course content")
         } finally {
-          setLoading(false)
+          if (!isRefetch) setInitialLoading(false)
         }
     }
 
@@ -57,20 +52,22 @@ const Lesson = () => {
             <Header userInfo={user}/>
             <div className="flex flex-1 min-h-0">
                 <Sidebar course={course} />
-                {loading
+                {initialLoading
                   ? <div className="flex flex-1 items-center justify-center">
                       <Loader />
                     </div> 
                   : errorMessage
                     ? <p className="text-white/40 text-center text-3xl flex-1 mt-20">{errorMessage}</p>
                     : <Content 
-                    lesson={currentLesson}
-                    moduleName={currentModule?.title}
-                    courseTopic={currentCourse}
-                    refetchCourse={getCourse}
-                    currentModule={currentModule}
-                    allModules={course?.modules}
-                />}
+                        lesson={currentLesson}
+                        moduleName={currentModule?.title}
+                        courseTopic={currentCourse}
+                        refetchCourse={() => getCourse(true)}
+                        currentModule={currentModule}
+                        allModules={course?.modules}
+                        course={course}
+                    />
+                }
             </div>
         </div>
     );

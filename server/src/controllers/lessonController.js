@@ -1,15 +1,29 @@
-const { enrichLesson, getLesson } = require("../models/lessonModel")
-const { generateLessonContent } = require("../services/lessonAiService")
+const { getLesson } = require("../models/lessonModel")
+const { addEnrichJob } = require("../queues/lessonQueue")
 
 const enrichLessonById = async (req, res) => {
-    const { lessonId } = req.params
-    const { topic, module, lesson  } = req.body
-    const content = await generateLessonContent(topic, module, lesson)
-
     try {
-        const enrichedLesson = await enrichLesson(lessonId, content)
-        res.status(201).json({ lesson: enrichedLesson })
-    } catch(error) {
+        const { lessonId } = req.params
+        const { topic, module, lesson, courseId, nextLessonId, nextModuleName, nextLessonName } = req.body
+        console.log(`Enrich called for lessonId: ${lessonId}`)
+
+        const existingLesson = await getLesson(lessonId)
+        if (existingLesson.enrichFailed) {
+            existingLesson.enrichFailed = false
+            await existingLesson.save()
+        }
+
+        await addEnrichJob(lessonId, topic, module, lesson, 1)
+
+        if (nextLessonId) {
+            const nextLesson = await getLesson(nextLessonId)
+            if (!nextLesson.isEnriched) {
+                await addEnrichJob(nextLessonId, topic, nextModuleName, nextLessonName, 10)
+            }
+        }
+
+        res.status(202).json({ message: "Lesson enrichment queued" })
+    } catch (error) {
         res.status(500).json({ error: "Unable to enrich lesson", details: error.message })
     }
 }

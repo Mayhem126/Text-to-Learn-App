@@ -2,6 +2,7 @@ const { getCourses, createCourse, getCourseById } = require("../models/courseMod
 const { generateCourse } = require("../services/aiService")
 const { createLesson } = require("../models/lessonModel")
 const { createModule } = require("../models/moduleModel")
+const { addEnrichJob } = require("../queues/lessonQueue")
 
 const getUserCourses = async (req, res) => {
     try {
@@ -45,23 +46,40 @@ const generateAndSaveCourse = async (req, res) => {
         )
 
         const moduleIds = []
+        let firstLesson = null
+        let firstModule = null
+
         for (const mod of generated.modules) {
             const savedModule = await createModule(mod.title, course._id)
-
             const lessonIds = []
+
             for (const lesson of mod.lessons) {
                 const savedLesson = await createLesson(lesson.title, savedModule._id)
                 lessonIds.push(savedLesson._id)
+
+                if (!firstLesson) {
+                    firstLesson = savedLesson
+                    firstModule = savedModule
+                }
             }
 
             savedModule.lessons = lessonIds
             await savedModule.save()
-
             moduleIds.push(savedModule._id)
         }
 
         course.modules = moduleIds
         await course.save()
+
+        if (firstLesson) {
+            await addEnrichJob(
+                firstLesson._id,
+                generated.title,
+                firstModule.title,
+                firstLesson.title,
+                1
+            )
+        }
 
         res.status(201).json({ course, modules: generated.modules })
     } catch (error) {

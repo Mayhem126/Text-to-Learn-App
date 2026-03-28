@@ -2,6 +2,7 @@ const connectToDatabase = require("./src/config/db")
 const express = require('express')
 const cors = require('cors')
 const { PORT, FRONTEND_URL } = require("./src/config/env")
+require("./src/workers/lessonWorker")
 
 connectToDatabase()
 
