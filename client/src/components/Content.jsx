@@ -8,7 +8,7 @@ import LessonNavigate from "./LessonNavigate"
 import { useParams } from "react-router-dom"
 const serverURL = import.meta.env.VITE_SERVER_URL
 
-const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule, allModules, course }) => {
+const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule, allModules }) => {
     const { lessonId, moduleId } = useParams()
     const [lessonContent, setLessonContent] = useState(lesson?.content?.[0]?.content || [])
     const [objectives, setObjectives] = useState(lesson?.content?.[0]?.objectives || [])
@@ -17,11 +17,7 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule
     const { getAccessTokenSilently } = useAuth0()
     const scrollRef = useRef(null)
     const enrichingLessonId = useRef(null)
-    const courseRef = useRef(course)
-
-    useEffect(() => {
-        courseRef.current = course
-    }, [course])
+    
 
     const lessons = currentModule?.lessons
     const currentLessonIndex = lessons?.findIndex(l => l._id === lessonId)
@@ -74,9 +70,13 @@ const Content = ({ lesson, moduleName, courseTopic, refetchCourse, currentModule
             const poll = async () => {
                 if (enrichingLessonId.current !== thisLessonId) return
             
-                await refetchCourse()
+                const updatedCourse = await refetchCourse()
+                if (!updatedCourse) {
+                    setTimeout(poll, 3000)
+                    return
+                }
             
-                const updatedLesson = courseRef.current?.modules
+                const updatedLesson = updatedCourse?.modules
                     ?.find(m => m._id === moduleId)
                     ?.lessons?.find(l => l._id === thisLessonId)
             

@@ -36,6 +36,7 @@ const Lesson = () => {
           }
           const responseData = await response.json();
           setCourse(responseData);
+          return responseData
         } catch (error) {
           setErrorMessage("Failed to retrieve course content")
         } finally {
@@ -65,7 +66,6 @@ const Lesson = () => {
                         refetchCourse={() => getCourse(true)}
                         currentModule={currentModule}
                         allModules={course?.modules}
-                        course={course}
                     />
                 }
             </div>
